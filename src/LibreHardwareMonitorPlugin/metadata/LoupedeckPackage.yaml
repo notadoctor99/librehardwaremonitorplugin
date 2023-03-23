@@ -1,0 +1,25 @@
+type: plugin4
+name: LibreHardwareMonitor
+displayName: Libre Hardware Monitor
+description: Shows the basic PC hardware parameters (CPU and GPU temperature, CPU, GPU and memory load, CPU power consumption, etc.) using data provided by Libre Hardware Monitor application.
+version: 1.0
+
+author: NotADoctor99
+copyright: Copyright © 2023 NotADoctor99. All rights reserved.
+license: MIT
+licenseUrl: https://opensource.org/licenses/MIT
+
+homePageUrl: https://github.com/notadoctor99/librehardwaremonitorplugin
+supportPageUrl: https://github.com/notadoctor99/librehardwaremonitorplugin/issues
+
+pluginFileName: LibreHardwareMonitorPlugin.dll
+pluginFolderWin: .
+
+supportedDevices:
+    - LoupedeckCtFamily
+
+pluginCapabilities:
+    #- HasApplication
+    #- ActivatesApplication
+
+minimumLoupedeckVersion: 5.6

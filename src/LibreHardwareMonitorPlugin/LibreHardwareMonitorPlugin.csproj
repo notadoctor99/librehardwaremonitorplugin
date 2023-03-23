@@ -1,0 +1,107 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CF8D42AA-0002-4C98-996D-78DE9B647E07}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NotADoctor99.LibreHardwareMonitorPlugin</RootNamespace>
+    <AssemblyName>LibreHardwareMonitorPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup>
+    <BaseIntermediateOutputPath>$(SolutionDir)..\obj\</BaseIntermediateOutputPath>
+    <BaseOutputPath>$(SolutionDir)..\bin\</BaseOutputPath>
+    <OutputPath>$(BaseOutputPath)$(Configuration)\LibreHardwareMonitorPlugin\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PluginApi, Version=2.0.8376.25076, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>LoupedeckPluginTool\PluginApi.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Actions\HardwareMonitorControlCenter.cs" />
+    <Compile Include="LibreHardwareMonitor\LibreHardwareMonitorGaugeType.cs" />
+    <Compile Include="Actions\OpenApplicationCommand.cs" />
+    <Compile Include="Actions\ShowGaugeCommand.cs" />
+    <Compile Include="Actions\ShowSensorCommand.cs" />
+    <Compile Include="Helpers\PluginLog.cs" />
+    <Compile Include="Helpers\PluginResources.cs" />
+    <Compile Include="LibreHardwareMonitor\LibreHardwareMonitorExtensions.cs" />
+    <Compile Include="LibreHardwareMonitor\LibreHardwareMonitorSensor.cs" />
+    <Compile Include="LibreHardwareMonitor\LibreHardwareMonitorGaugeValueChangedEventArgs.cs" />
+    <Compile Include="LibreHardwareMonitor\NativeMethods.cs" />
+    <Compile Include="LibreHardwareMonitorApplication.cs" />
+    <Compile Include="LibreHardwareMonitor\LibreHardwareMonitor.cs" />
+    <Compile Include="LibreHardwareMonitorPlugin.cs" />
+    <Compile Include="LibreHardwareMonitor\LibreHardwareMonitorSensorValueChangedEventArgs.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="BuildEvents\BuildPackage.cmd" />
+    <None Include="metadata\LoupedeckPackage.yaml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\HardwareMonitorControlCenter.png" />
+    <EmbeddedResource Include="Actions\OpenApplicationCommand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\Battery0.png" />
+    <EmbeddedResource Include="Actions\Images\Battery1.png" />
+    <EmbeddedResource Include="Actions\Images\Battery2.png" />
+    <EmbeddedResource Include="Actions\Images\Battery3.png" />
+    <EmbeddedResource Include="Actions\Images\Battery4.png" />
+    <EmbeddedResource Include="Actions\Images\Battery5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\CPU1.png" />
+    <EmbeddedResource Include="Actions\Images\CPU2.png" />
+    <EmbeddedResource Include="Actions\Images\CPU3.png" />
+    <EmbeddedResource Include="Actions\Images\CPU4.png" />
+    <EmbeddedResource Include="Actions\Images\CPU5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\Memory0.png" />
+    <EmbeddedResource Include="Actions\Images\Memory1.png" />
+    <EmbeddedResource Include="Actions\Images\Memory2.png" />
+    <EmbeddedResource Include="Actions\Images\Memory3.png" />
+    <EmbeddedResource Include="Actions\Images\Memory4.png" />
+    <EmbeddedResource Include="Actions\Images\Memory5.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>echo $(TargetDir) &gt; "%25LocalAppData%25\Loupedeck\Plugins\$(ProjectName).link"
+call "$(ProjectDir)BuildEvents\BuildPackage.cmd" "$(ProjectDir)" "$(TargetDir)"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
