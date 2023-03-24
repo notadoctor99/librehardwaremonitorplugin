@@ -126,18 +126,28 @@
 
         public event EventHandler<EventArgs> SensorListChanged;
 
-        private readonly Dictionary<String, LibreHardwareMonitorSensor> _sensors = new Dictionary<String, LibreHardwareMonitorSensor>(StringComparer.InvariantCultureIgnoreCase);
-        private readonly Dictionary<LibreHardwareMonitorGaugeType, LibreHardwareMonitorSensor> _gauges = new Dictionary<LibreHardwareMonitorGaugeType, LibreHardwareMonitorSensor>();
+        private readonly Dictionary<String, LibreHardwareMonitorSensor> _sensorsByName = new Dictionary<String, LibreHardwareMonitorSensor>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<String, LibreHardwareMonitorSensor> _sensorsById = new Dictionary<String, LibreHardwareMonitorSensor>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<LibreHardwareMonitorGaugeType, LibreHardwareMonitorSensor> _sensorsByGaugeType = new Dictionary<LibreHardwareMonitorGaugeType, LibreHardwareMonitorSensor>();
 
-        public IReadOnlyCollection<LibreHardwareMonitorSensor> Sensors => this._sensors.Values;
+        public IReadOnlyCollection<LibreHardwareMonitorSensor> Sensors => this._sensorsByName.Values;
 
         public event EventHandler<LibreHardwareMonitorSensorValuesChangedEventArgs> SensorValuesChanged;
 
         public event EventHandler<LibreHardwareMonitorGaugeValueChangedEventArgs> GaugeValuesChanged;
 
-        public Boolean TryGetSensor(String sensorName, out LibreHardwareMonitorSensor sensor) => this._sensors.TryGetValueSafe(sensorName, out sensor);
+        public Boolean TryGetSensor(String sensorName, out LibreHardwareMonitorSensor sensor) => this._sensorsByName.TryGetValueSafe(sensorName, out sensor);
 
-        public Boolean TryGetSensor(LibreHardwareMonitorGaugeType gaugeType, out LibreHardwareMonitorSensor sensor) => this._gauges.TryGetValueSafe(gaugeType, out sensor);
+        public Boolean TryGetSensor(ManagementBaseObject wmiSensor, out LibreHardwareMonitorSensor sensor)
+        {
+            var instanceId = wmiSensor.GetInstanceId();
+            var identifier = wmiSensor.GetIdentifier();
+            var sensorId = LibreHardwareMonitorSensor.CreateSensorId(instanceId, identifier);
+
+            return this._sensorsById.TryGetValueSafe(sensorId, out sensor);
+        }
+
+        public Boolean TryGetSensor(LibreHardwareMonitorGaugeType gaugeType, out LibreHardwareMonitorSensor sensor) => this._sensorsByGaugeType.TryGetValueSafe(gaugeType, out sensor);
 
         private Boolean TryGetProcessId(out String processId)
         {
@@ -164,10 +174,11 @@
 
         private Int32 GetAvailableSensors()
         {
-            lock (this._sensors)
+            lock (this._sensorsByName)
             {
-                this._sensors.Clear();
-                this._gauges.Clear();
+                this._sensorsByName.Clear();
+                this._sensorsById.Clear();
+                this._sensorsByGaugeType.Clear();
 
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -237,13 +248,15 @@
                         var sensorQuery = $"SELECT InstanceId,Identifier,Name,Value FROM Sensor WHERE ProcessId = \"{processId}\" AND Parent = \"{parentId}\" AND SensorType = \"{sensorType}\"";
                         using (var sensorSearcher = new ManagementObjectSearcher(LibreHardwareMonitorScope, sensorQuery))
                         {
-                            foreach (var item in sensorSearcher.Get())
+                            foreach (var wmiSensor in sensorSearcher.Get())
                             {
-                                var displayName = item.GetDisplayName();
+                                var displayName = wmiSensor.GetDisplayName();
 
                                 if (!displayName.Contains(" #"))
                                 {
-                                    var identifier = item.GetIdentifier();
+                                    var name = $"{parentName}-{sensorType}-{displayName}".Replace(' ', '.');
+
+                                    var identifier = wmiSensor.GetIdentifier();
 
                                     var gaugeType = LibreHardwareMonitorGaugeType.None;
                                     if (identifier.EndsWithNoCase("/load/0") && displayName.EqualsNoCase("CPU Total"))
@@ -262,12 +275,13 @@
                                     var itemFormatString = formatString.Replace("{-}", displayName);
                                     var itemDisplayName = $"[{parentName} {sensorType}] {displayName}";
 
-                                    var sensor = new LibreHardwareMonitorSensor(item.GetInstanceId(), identifier, itemDisplayName, itemFormatString, item.GetValue(), gaugeType);
-                                    this._sensors[sensor.Name] = sensor;
+                                    var sensor = new LibreHardwareMonitorSensor(name, wmiSensor.GetInstanceId(), identifier, itemDisplayName, itemFormatString, wmiSensor.GetValue(), gaugeType);
+                                    this._sensorsByName[sensor.Name] = sensor;
+                                    this._sensorsById[sensor.Id] = sensor;
 
                                     if (sensor.GaugeType != LibreHardwareMonitorGaugeType.None)
                                     {
-                                        this._gauges[sensor.GaugeType] = sensor;
+                                        this._sensorsByGaugeType[sensor.GaugeType] = sensor;
                                     }
                                 }
                             }
@@ -282,11 +296,11 @@
                 // all done
 
                 stopwatch.Stop();
-                PluginLog.Info($"{this._sensors.Count} sensors found in {stopwatch.Elapsed.TotalMilliseconds:N0} ms");
+                PluginLog.Info($"{this._sensorsByName.Count}/{this._sensorsById.Count}/{this._sensorsByGaugeType.Count} sensors found in {stopwatch.Elapsed.TotalMilliseconds:N0} ms");
 
                 this.SensorListChanged?.BeginInvoke(this, new EventArgs());
 
-                return this._sensors.Count;
+                return this._sensorsByName.Count;
             }
         }
 
@@ -303,15 +317,11 @@
                 var sensorQuery = $"SELECT InstanceId,Identifier,Value FROM Sensor";
                 using (var sensorSearcher = new ManagementObjectSearcher(LibreHardwareMonitorScope, sensorQuery))
                 {
-                    foreach (var item in sensorSearcher.Get())
+                    foreach (var wmiSensor in sensorSearcher.Get())
                     {
-                        var instanceId = item.GetInstanceId();
-                        var identifier = item.GetIdentifier();
-                        var sensorName = LibreHardwareMonitorSensor.CreateName(instanceId, identifier);
-
-                        if (this.TryGetSensor(sensorName, out var sensor))
+                        if (this.TryGetSensor(wmiSensor, out var sensor))
                         {
-                            var value = item.GetValue();
+                            var value = wmiSensor.GetValue();
 
                             if (sensor.SetValue(value))
                             {

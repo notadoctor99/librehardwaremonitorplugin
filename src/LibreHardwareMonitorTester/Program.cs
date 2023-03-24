@@ -66,20 +66,20 @@
             }
         }
 
-        private static void OnProcessStarted(Object sender, EventArgs e) => Console.WriteLine($"--- {Now()} ---  ProcessStarted");
+        private static void OnProcessStarted(Object sender, EventArgs e) => Console.WriteLine($"{Now()} [ProcessStarted]");
 
-        private static void OnProcessExited(Object sender, EventArgs e) => Console.WriteLine($"--- {Now()} ---  ProcessExited");
+        private static void OnProcessExited(Object sender, EventArgs e) => Console.WriteLine($"{Now()} [ProcessExited]");
 
         private static void OnSensorListChanged(Object sender, EventArgs e)
         {
-            Console.WriteLine($"--- {Now()} ---  Monitoring started");
+            Console.WriteLine($"{Now()} [SensorListChanged]");
             if (sender is LibreHardwareMonitor hardwareMonitor)
             {
                 Console.WriteLine($"{hardwareMonitor.Sensors.Count} sensors found:");
 
                 foreach (var sensor in hardwareMonitor.Sensors)
                 {
-                    Console.WriteLine($"{sensor.InstanceId} '{sensor.Identifier}' {sensor.Value} = '{sensor.GetButtonText()}'");
+                    Console.WriteLine($"'{sensor.Id}' '{sensor.Name}' {sensor.Value} = '{sensor.GetButtonText()}'");
                 }
             }
         }
@@ -88,7 +88,7 @@
         {
             if (sender is LibreHardwareMonitor hardwareMonitor)
             {
-                Console.WriteLine($"--- {Now()} --- SensorValuesChanged:");
+                Console.WriteLine($"{Now()} [SensorValuesChanged]");
                 foreach (var sensorName in e.SensorNames)
                 {
                     Console.WriteLine($"\t{sensorName} = {(hardwareMonitor.TryGetSensor(sensorName, out var sensor) ? sensor.Value.ToString("N1") : "NOT FOUND")}");
@@ -101,7 +101,7 @@
             var targetInstance = (ManagementBaseObject)e.NewEvent.Properties["TargetInstance"].Value;
             var instanceId = targetInstance.GetInstanceId();
             var identifier = targetInstance.GetIdentifier();
-            Console.WriteLine($"--- {Now()} --- CREATED '{instanceId}-{identifier}'");
+            Console.WriteLine($"{Now()} [InstanceCreationEvent.EventArrived] '{instanceId}-{identifier}'");
         }
 
         private static String Now() => $"{DateTime.Now:hh:mm:ss.fff}";

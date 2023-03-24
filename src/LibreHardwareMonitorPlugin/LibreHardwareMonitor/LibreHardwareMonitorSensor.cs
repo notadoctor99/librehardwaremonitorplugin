@@ -6,6 +6,8 @@
     {
         private Boolean _isModified = false;
 
+        public String Id { get; }
+
         public String Name { get; }
 
         public String InstanceId { get; }
@@ -20,9 +22,11 @@
 
         public Single Value { get; private set; }
 
-        internal LibreHardwareMonitorSensor(String instanceId, String identifier, String displayName, String formatString, Single value, LibreHardwareMonitorGaugeType gaugeType)
+        internal LibreHardwareMonitorSensor(String name, String instanceId, String identifier, String displayName, String formatString, Single value, LibreHardwareMonitorGaugeType gaugeType)
         {
-            this.Name = LibreHardwareMonitorSensor.CreateName(instanceId, identifier);
+            this.Id = LibreHardwareMonitorSensor.CreateSensorId(instanceId, identifier);
+
+            this.Name = name;
             this.InstanceId = instanceId;
             this.Identifier = identifier;
             this.DisplayName = displayName;
@@ -53,6 +57,6 @@
 
         public String GetButtonText() => String.Format(this.FormatString, this.Value);
 
-        internal static String CreateName(String instanceId, String identifier) => $"{instanceId}-{identifier}";
+        internal static String CreateSensorId(String instanceId, String identifier) => $"{instanceId}-{identifier}";
     }
 }
