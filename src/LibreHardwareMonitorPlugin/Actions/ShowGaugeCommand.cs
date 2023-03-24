@@ -36,33 +36,35 @@
 
         protected override void RunCommand(String actionParameter) => LibreHardwareMonitor.ActivateOrRun();
 
-        protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize) => "Sensor\nis\nbroken";
+        protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize) => PluginHelpers.GetNotAvailableButtonText();
 
-        private readonly Int32[] _lastIndexes = new Int32[(Int32)LibreHardwareMonitorGaugeType.Count];
+        private readonly Int32[] _lastLevels = new Int32[(Int32)LibreHardwareMonitorGaugeType.Count];
 
         protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize)
         {
             if (!Enum.TryParse<LibreHardwareMonitorGaugeType>(actionParameter, out var gaugeType) || !LibreHardwareMonitorPlugin.HardwareMonitor.TryGetSensor(gaugeType, out var sensor))
             {
-                return null;
+                return PluginHelpers.GetNotAvailableButtonImage();
             }
+
+            var level = this._lastLevels[(Int32)gaugeType];
+            var index = 0;
 
             switch (gaugeType)
             {
                 case LibreHardwareMonitorGaugeType.CPU:
+                    index = Helpers.MinMax((level + 19) / 20, 1, 5);
+                    break;
                 case LibreHardwareMonitorGaugeType.Memory:
                 case LibreHardwareMonitorGaugeType.Battery:
+                    index = Helpers.MinMax((level + 9) / 20, 0, 5);
                     break;
-                default:
-                    return null;
             }
-
-            var level = (Int32)Math.Round(sensor.Value);
 
             using (var bitmapBuilder = new BitmapBuilder(PluginImageSize.Width90))
             {
                 bitmapBuilder.Clear(BitmapColor.Black);
-                var imageBytes = PluginResources.ReadBinaryFile($"{gaugeType}{this._lastIndexes[(Int32)gaugeType]}.png");
+                var imageBytes = PluginResources.ReadBinaryFile($"{gaugeType}{index}.png");
                 bitmapBuilder.DrawImage(imageBytes, 0, 0);
                 bitmapBuilder.DrawText($"{level} %", 0, 40, 80, 40);
                 return bitmapBuilder.ToImage();
@@ -96,22 +98,10 @@
             }
 
             var level = (Int32)Math.Round(sensor.Value);
-            var index = 0;
 
-            switch (gaugeType)
+            if (this._lastLevels[(Int32)gaugeType] != level)
             {
-                case LibreHardwareMonitorGaugeType.CPU:
-                    index = Helpers.MinMax((level + 19) / 20, 1, 5);
-                    break;
-                case LibreHardwareMonitorGaugeType.Memory:
-                case LibreHardwareMonitorGaugeType.Battery:
-                    index = Helpers.MinMax((level + 9) / 20, 0, 5);
-                    break;
-            }
-
-            if (this._lastIndexes[(Int32)gaugeType] != index)
-            {
-                this._lastIndexes[(Int32)gaugeType] = index;
+                this._lastLevels[(Int32)gaugeType] = level;
                 return true;
             }
 

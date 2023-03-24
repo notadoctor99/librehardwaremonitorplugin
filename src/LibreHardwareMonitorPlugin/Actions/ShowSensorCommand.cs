@@ -32,7 +32,10 @@
         protected override void RunCommand(String actionParameter) => LibreHardwareMonitor.ActivateOrRun();
 
         protected override String GetCommandDisplayName(String actionParameter, PluginImageSize imageSize)
-            => LibreHardwareMonitorPlugin.HardwareMonitor.TryGetSensor(actionParameter, out var sensor) ? sensor.GetButtonText() : "Sensor\nis\nbroken";
+            => LibreHardwareMonitorPlugin.HardwareMonitor.TryGetSensor(actionParameter, out var sensor) ? sensor.GetButtonText() : PluginHelpers.GetNotAvailableButtonText();
+
+        protected override BitmapImage GetCommandImage(String actionParameter, PluginImageSize imageSize)
+            => LibreHardwareMonitorPlugin.HardwareMonitor.TryGetSensor(actionParameter, out var sensor) ? null : PluginHelpers.GetNotAvailableButtonImage();
 
         private void OnSensorListChanged(Object sender, EventArgs e) => this.UpdateParameters();
 

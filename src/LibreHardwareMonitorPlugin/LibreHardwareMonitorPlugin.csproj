@@ -51,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Actions\HardwareMonitorControlCenter.cs" />
+    <Compile Include="Actions\PluginHelpers.cs" />
     <Compile Include="LibreHardwareMonitor\LibreHardwareMonitorGaugeType.cs" />
     <Compile Include="Actions\OpenApplicationCommand.cs" />
     <Compile Include="Actions\ShowGaugeCommand.cs" />
@@ -98,6 +99,10 @@
     <EmbeddedResource Include="Actions\Images\Memory3.png" />
     <EmbeddedResource Include="Actions\Images\Memory4.png" />
     <EmbeddedResource Include="Actions\Images\Memory5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\PressToStart.png" />
+    <EmbeddedResource Include="Actions\Images\SensorNotAvailable.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
