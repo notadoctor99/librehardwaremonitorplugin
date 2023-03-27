@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?define Manufacturer="NotADoctor99"?>
+<?define ProductName="Libre Hardware Monitor"?>
+<?define ProductVersion="0.92"?>
+<!--?define ProductVersion="!(bind.ProductVersion.LibreHardwareMonitor.exe)"?-->
+
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Product Id="*" Name="$(var.ProductName)" Language="1033" Version="$(var.ProductVersion)" Manufacturer="$(var.Manufacturer)" UpgradeCode="DAE9A8EF-E803-4D65-9D57-51054BE55526">
+        <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64" />
+
+        <MajorUpgrade AllowSameVersionUpgrades="yes" DowngradeErrorMessage="A newer version of [ProductName] is already installed." />
+
+        <Icon Id="LibreHardwareMonitor.ico" SourceFile="LibreHardwareMonitor.ico"/>
+        <Property Id="ARPPRODUCTICON" Value="LibreHardwareMonitor.ico" />
+
+        <WixVariable Id="WixUIBannerBmp" Value="WixUIBannerBmp.bmp" />
+        <WixVariable Id="WixUIDialogBmp" Value="WixUIDialogBmp.bmp" />
+
+        <Media Id="1" Cabinet="LibreHardwareMonitor.cab" EmbedCab="yes" />
+
+        <Feature Id="ProductFeature" Title="$(var.ProductName) $(var.ProductVersion)" Level="1">
+            <ComponentGroupRef Id="LibreHardwareMonitorFilesComponentGroup" />
+            <ComponentRef Id="LibreHardwareMonitorFilesComponent" />
+            <ComponentRef Id="StartMenuShortcutsComponent" />
+        </Feature>
+
+        <UI Id="UserInterface">
+            <Property Id="WIXUI_INSTALLDIR" Value="TARGETDIR" />
+            <Property Id="WixUI_Mode" Value="Custom" />
+
+            <TextStyle Id="WixUI_Font_Normal" FaceName="Tahoma" Size="8" />
+            <TextStyle Id="WixUI_Font_Bigger" FaceName="Tahoma" Size="9" Bold="yes" />
+            <TextStyle Id="WixUI_Font_Title"  FaceName="Tahoma" Size="9" Bold="yes" />
+
+            <Property Id="DefaultUIFont" Value="WixUI_Font_Normal" />
+
+            <DialogRef Id="ProgressDlg" />
+            <DialogRef Id="ErrorDlg" />
+            <DialogRef Id="FilesInUse" />
+            <DialogRef Id="FatalError" />
+            <DialogRef Id="UserExit" />
+
+            <Publish Dialog="WelcomeDlg" Control="Next" Event="EndDialog" Value="Return" Order="2"></Publish>
+            <Publish Dialog="ExitDialog" Control="Finish" Event="EndDialog" Value="Return" Order="999">1</Publish>
+        </UI>
+
+        <UIRef Id="WixUI_Common" />
+
+        <InstallExecuteSequence>
+            <Custom Action="LaunchLibreHardwareMonitor" Before="InstallFinalize">NOT REMOVE</Custom>
+        </InstallExecuteSequence>
+    </Product>
+
+    <Fragment>
+        <Directory Id="TARGETDIR" Name="SourceDir">
+            <Directory Id="ProgramFiles64Folder">
+                <Directory Id="COMPANYFOLDER" Name="NotADoctor99">
+                    <Directory Id="INSTALLFOLDER" Name="Libre Hardware Monitor" />
+                </Directory>
+            </Directory>
+
+            <Directory Id="ProgramMenuFolder" />
+        </Directory>
+    </Fragment>
+
+    <Fragment>
+		<Component Id="LibreHardwareMonitorFilesComponent" Directory="TARGETDIR" Guid="2A3C21EC-A4D1-40C7-A6C0-888E2A757A07">
+			<RemoveFolder Id="RemoveTargetDir" Directory="TARGETDIR" On="uninstall" />
+			<RegistryValue Root="HKCU" Key="Software\$(var.Manufacturer)\$(var.ProductName)" Name="LibreHardwareMonitorFiles" Type="integer" Value="1" KeyPath="yes" />
+		</Component>
+    </Fragment>
+
+    <Fragment>
+        <Component Id="StartMenuShortcutsComponent" Directory="ProgramMenuFolder" Guid="A5FD6267-C71F-44D1-A1F4-83798A9901CF">
+            <Shortcut Id="StartMenuShortcutLibreHardwareMonitor" Name="Libre Hardware Monitor" Description="Starts Libre Hardware Monitor" Target="[INSTALLFOLDER]LibreHardwareMonitor.exe" WorkingDirectory="INSTALLFOLDER" />
+            <RemoveFolder Id="ProgramMenuFolder" On="uninstall" />
+            <RegistryValue Root="HKCU" Key="Software\$(var.Manufacturer)\$(var.ProductName)" Name="LibreHardwareMonitorStartMenu" Type="integer" Value="1" KeyPath="yes" />
+        </Component>
+    </Fragment>
+
+    <Fragment>
+        <CustomAction Id="LaunchLibreHardwareMonitor" Directory="INSTALLFOLDER" ExeCommand="&quot;[INSTALLFOLDER]LibreHardwareMonitor.exe&quot;" Execute="deferred" Impersonate="no" Return="asyncNoWait" />
+    </Fragment>
+</Wix>

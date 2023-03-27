@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+    <Fragment>
+        <DirectoryRef Id="INSTALLFOLDER">
+            <Component Id="Aga.Controls.dll" Guid="*">
+                <File Id="Aga.Controls.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\Aga.Controls.dll" />
+            </Component>
+            <Component Id="Aga.Controls.pdb" Guid="*">
+                <File Id="Aga.Controls.pdb" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\Aga.Controls.pdb" />
+            </Component>
+            <Component Id="HidSharp.dll" Guid="*">
+                <File Id="HidSharp.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\HidSharp.dll" />
+            </Component>
+            <Component Id="LibreHardwareMonitor.exe" Guid="*">
+                <File Id="LibreHardwareMonitor.exe" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\LibreHardwareMonitor.exe" />
+            </Component>
+            <Component Id="LibreHardwareMonitor.exe.config" Guid="*">
+                <File Id="LibreHardwareMonitor.exe.config" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\LibreHardwareMonitor.exe.config" />
+            </Component>
+            <Component Id="LibreHardwareMonitorLib.dll" Guid="*">
+                <File Id="LibreHardwareMonitorLib.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\LibreHardwareMonitorLib.dll" />
+            </Component>
+            <Component Id="LibreHardwareMonitorLib.pdb" Guid="*">
+                <File Id="LibreHardwareMonitorLib.pdb" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\LibreHardwareMonitorLib.pdb" />
+            </Component>
+            <Component Id="LibreHardwareMonitorLib.xml" Guid="*">
+                <File Id="LibreHardwareMonitorLib.xml" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\LibreHardwareMonitorLib.xml" />
+            </Component>
+            <Component Id="Microsoft.Win32.TaskScheduler.dll" Guid="*">
+                <File Id="Microsoft.Win32.TaskScheduler.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\Microsoft.Win32.TaskScheduler.dll" />
+            </Component>
+            <Component Id="Newtonsoft.Json.dll" Guid="*">
+                <File Id="Newtonsoft.Json.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\Newtonsoft.Json.dll" />
+            </Component>
+            <Component Id="OxyPlot.dll" Guid="*">
+                <File Id="OxyPlot.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\OxyPlot.dll" />
+            </Component>
+            <Component Id="OxyPlot.WindowsForms.dll" Guid="*">
+                <File Id="OxyPlot.WindowsForms.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\OxyPlot.WindowsForms.dll" />
+            </Component>
+            <Component Id="System.CodeDom.dll" Guid="*">
+                <File Id="System.CodeDom.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\System.CodeDom.dll" />
+            </Component>
+            <Directory Id="de" Name="de">
+                <Component Id="Microsoft.Win32.TaskScheduler.resources.dll" Guid="*">
+                    <File Id="Microsoft.Win32.TaskScheduler.resources.dll" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\de\Microsoft.Win32.TaskScheduler.resources.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="es" Name="es">
+                <Component Id="Microsoft.Win32.TaskScheduler.resources.dll_1" Guid="*">
+                    <File Id="Microsoft.Win32.TaskScheduler.resources.dll_1" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\es\Microsoft.Win32.TaskScheduler.resources.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="fr" Name="fr">
+                <Component Id="Microsoft.Win32.TaskScheduler.resources.dll_2" Guid="*">
+                    <File Id="Microsoft.Win32.TaskScheduler.resources.dll_2" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\fr\Microsoft.Win32.TaskScheduler.resources.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="it" Name="it">
+                <Component Id="Microsoft.Win32.TaskScheduler.resources.dll_3" Guid="*">
+                    <File Id="Microsoft.Win32.TaskScheduler.resources.dll_3" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\it\Microsoft.Win32.TaskScheduler.resources.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="pl" Name="pl">
+                <Component Id="Microsoft.Win32.TaskScheduler.resources.dll_4" Guid="*">
+                    <File Id="Microsoft.Win32.TaskScheduler.resources.dll_4" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\pl\Microsoft.Win32.TaskScheduler.resources.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="ru" Name="ru">
+                <Component Id="Microsoft.Win32.TaskScheduler.resources.dll_5" Guid="*">
+                    <File Id="Microsoft.Win32.TaskScheduler.resources.dll_5" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\ru\Microsoft.Win32.TaskScheduler.resources.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="zh_CN" Name="zh-CN">
+                <Component Id="Microsoft.Win32.TaskScheduler.resources.dll_6" Guid="*">
+                    <File Id="Microsoft.Win32.TaskScheduler.resources.dll_6" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\zh-CN\Microsoft.Win32.TaskScheduler.resources.dll" />
+                </Component>
+            </Directory>
+            <Directory Id="zh_Hant" Name="zh-Hant">
+                <Component Id="Microsoft.Win32.TaskScheduler.resources.dll_7" Guid="*">
+                    <File Id="Microsoft.Win32.TaskScheduler.resources.dll_7" KeyPath="yes" Source="$(var.LibreHardwareMonitorFilesSourceDir)\zh-Hant\Microsoft.Win32.TaskScheduler.resources.dll" />
+                </Component>
+            </Directory>
+        </DirectoryRef>
+    </Fragment>
+    <Fragment>
+        <ComponentGroup Id="LibreHardwareMonitorFilesComponentGroup">
+            <ComponentRef Id="Aga.Controls.dll" />
+            <ComponentRef Id="Aga.Controls.pdb" />
+            <ComponentRef Id="HidSharp.dll" />
+            <ComponentRef Id="LibreHardwareMonitor.exe" />
+            <ComponentRef Id="LibreHardwareMonitor.exe.config" />
+            <ComponentRef Id="LibreHardwareMonitorLib.dll" />
+            <ComponentRef Id="LibreHardwareMonitorLib.pdb" />
+            <ComponentRef Id="LibreHardwareMonitorLib.xml" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.dll" />
+            <ComponentRef Id="Newtonsoft.Json.dll" />
+            <ComponentRef Id="OxyPlot.dll" />
+            <ComponentRef Id="OxyPlot.WindowsForms.dll" />
+            <ComponentRef Id="System.CodeDom.dll" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.resources.dll" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.resources.dll_1" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.resources.dll_2" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.resources.dll_3" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.resources.dll_4" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.resources.dll_5" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.resources.dll_6" />
+            <ComponentRef Id="Microsoft.Win32.TaskScheduler.resources.dll_7" />
+        </ComponentGroup>
+    </Fragment>
+</Wix>
