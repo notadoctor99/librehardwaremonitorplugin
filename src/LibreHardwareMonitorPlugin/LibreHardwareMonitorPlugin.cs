@@ -21,7 +21,7 @@
         {
             if (!LibreHardwareMonitor.IsInstalled())
             {
-                this.OnPluginStatusChanged(Loupedeck.PluginStatus.Error, "Libre Hardware Monitor is not installed", "https://github.com/LibreHardwareMonitor/LibreHardwareMonitor/releases", "Click here to install");
+                this.OnPluginStatusChanged(Loupedeck.PluginStatus.Error, "Libre Hardware Monitor is not installed", "https://github.com/notadoctor99/librehardwaremonitorplugin/wiki/Install-Libre-Hardware-Monitor", "Click here to install");
             }
             else if (!LibreHardwareMonitor.IsRunning())
             {

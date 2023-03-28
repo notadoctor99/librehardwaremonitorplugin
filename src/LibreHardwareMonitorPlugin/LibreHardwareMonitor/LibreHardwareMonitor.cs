@@ -99,6 +99,8 @@
                 this._sensorListChangeWatcher.Stop();
                 this._sensorListChangeTimer.Stop();
 
+                this.ClearSensors();
+
                 this.ProcessExited?.BeginInvoke(this, new EventArgs());
             }
             else if (this._isRunning)
@@ -136,10 +138,20 @@
 
         public event EventHandler<LibreHardwareMonitorGaugeValueChangedEventArgs> GaugeValuesChanged;
 
-        public Boolean TryGetSensor(String sensorName, out LibreHardwareMonitorSensor sensor) => this._sensorsByName.TryGetValueSafe(sensorName, out sensor);
+        public Boolean TryGetSensor(String sensorName, out LibreHardwareMonitorSensor sensor)
+        {
+            sensor = null;
+            return this._isRunning && this._sensorsByName.TryGetValueSafe(sensorName, out sensor);
+        }
 
         public Boolean TryGetSensor(ManagementBaseObject wmiSensor, out LibreHardwareMonitorSensor sensor)
         {
+            if (!this._isRunning)
+            {
+                sensor = null;
+                return false;
+            }
+
             var instanceId = wmiSensor.GetInstanceId();
             var identifier = wmiSensor.GetIdentifier();
             var sensorId = LibreHardwareMonitorSensor.CreateSensorId(instanceId, identifier);
@@ -147,7 +159,11 @@
             return this._sensorsById.TryGetValueSafe(sensorId, out sensor);
         }
 
-        public Boolean TryGetSensor(LibreHardwareMonitorGaugeType gaugeType, out LibreHardwareMonitorSensor sensor) => this._sensorsByGaugeType.TryGetValueSafe(gaugeType, out sensor);
+        public Boolean TryGetSensor(LibreHardwareMonitorGaugeType gaugeType, out LibreHardwareMonitorSensor sensor)
+        {
+            sensor = null;
+            return this._isRunning && this._sensorsByGaugeType.TryGetValueSafe(gaugeType, out sensor);
+        }
 
         private Boolean TryGetProcessId(out String processId)
         {
@@ -172,13 +188,18 @@
             return false;
         }
 
+        private void ClearSensors()
+        {
+            this._sensorsByName.Clear();
+            this._sensorsById.Clear();
+            this._sensorsByGaugeType.Clear();
+        }
+
         private Int32 GetAvailableSensors()
         {
             lock (this._sensorsByName)
             {
-                this._sensorsByName.Clear();
-                this._sensorsById.Clear();
-                this._sensorsByGaugeType.Clear();
+                this.ClearSensors();
 
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -473,8 +494,8 @@
 
             // Otherwise use the one that is distributed with plugin
 
-            var assemblyPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().Location).LocalPath);
-            executableFilePath = Path.Combine(assemblyPath, "LibreHardwareMonitor", "LibreHardwareMonitor.exe");
+            var programFilesDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            executableFilePath = Path.Combine(programFilesDirectory, "NotADoctor99", "Libre Hardware Monitor", "LibreHardwareMonitor.exe");
 
             if (File.Exists(executableFilePath))
             {

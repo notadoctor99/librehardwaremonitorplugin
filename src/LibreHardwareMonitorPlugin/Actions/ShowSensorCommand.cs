@@ -17,6 +17,8 @@
 
             LibreHardwareMonitorPlugin.HardwareMonitor.SensorListChanged += this.OnSensorListChanged;
             LibreHardwareMonitorPlugin.HardwareMonitor.SensorValuesChanged += this.OnSensorValuesChanged;
+            LibreHardwareMonitorPlugin.HardwareMonitor.ProcessStarted += this.OnHardwareMonitorProcessStarted;
+            LibreHardwareMonitorPlugin.HardwareMonitor.ProcessExited += this.OnHardwareMonitorProcessExited;
 
             return true;
         }
@@ -25,6 +27,8 @@
         {
             LibreHardwareMonitorPlugin.HardwareMonitor.SensorListChanged -= this.OnSensorListChanged;
             LibreHardwareMonitorPlugin.HardwareMonitor.SensorValuesChanged -= this.OnSensorValuesChanged;
+            LibreHardwareMonitorPlugin.HardwareMonitor.ProcessStarted -= this.OnHardwareMonitorProcessStarted;
+            LibreHardwareMonitorPlugin.HardwareMonitor.ProcessExited -= this.OnHardwareMonitorProcessExited;
 
             return true;
         }
@@ -39,6 +43,10 @@
 
         private void OnSensorListChanged(Object sender, EventArgs e) => this.UpdateParameters();
 
+        private void OnHardwareMonitorProcessExited(Object sender, EventArgs e) => this.ActionImageChanged(null);
+
+        private void OnHardwareMonitorProcessStarted(Object sender, EventArgs e) => this.ActionImageChanged(null);
+
         private void UpdateParameters()
         {
             this.RemoveAllParameters();
@@ -49,7 +57,7 @@
             }
 
             this.ParametersChanged();
-
+            this.ActionImageChanged(null);
         }
 
         private void OnSensorValuesChanged(Object sender, LibreHardwareMonitorSensorValuesChangedEventArgs e)

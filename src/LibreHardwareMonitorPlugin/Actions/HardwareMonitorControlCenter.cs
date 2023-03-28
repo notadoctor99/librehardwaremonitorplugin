@@ -16,6 +16,8 @@
         {
             LibreHardwareMonitorPlugin.HardwareMonitor.SensorListChanged += this.OnSensorListChanged;
             LibreHardwareMonitorPlugin.HardwareMonitor.SensorValuesChanged += this.OnSensorValuesChanged;
+            LibreHardwareMonitorPlugin.HardwareMonitor.ProcessExited += this.HardwareMonitorProcessExited;
+
             return true;
         }
 
@@ -23,6 +25,8 @@
         {
             LibreHardwareMonitorPlugin.HardwareMonitor.SensorListChanged -= this.OnSensorListChanged;
             LibreHardwareMonitorPlugin.HardwareMonitor.SensorValuesChanged -= this.OnSensorValuesChanged;
+            LibreHardwareMonitorPlugin.HardwareMonitor.ProcessExited -= this.HardwareMonitorProcessExited;
+
             return true;
         }
 
@@ -58,5 +62,7 @@
                 this.CommandImageChanged(sensorName);
             }
         }
+
+        private void HardwareMonitorProcessExited(Object sender, EventArgs e) => this.ButtonActionNamesChanged();
     }
 }
