@@ -3,7 +3,7 @@
   <Import Project="..\packages\WiX.3.11.2\build\wix.props" Condition="Exists('..\..\packages\WiX.3.11.2\build\wix.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform>x64</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>3.10</ProductVersion>
     <ProjectGuid>{55c85f99-9089-4fb7-8e85-fe8612928bff}</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
@@ -44,7 +44,7 @@
   </PropertyGroup>
   <Import Project="$(WixTargetsPath)" />
   <Target Name="BeforeBuild">
-    <HeatDirectory Directory="LibreHardwareMonitorFiles" PreprocessorVariable="var.LibreHardwareMonitorFilesSourceDir" OutputFile="LibreHardwareMonitorFiles.wxs" ComponentGroupName="LibreHardwareMonitorFilesComponentGroup" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressUniqueIds="true" SuppressCom="true" SuppressRegistry="true" SuppressRootDirectory="true" RunAsSeparateProcess="$(RunWixToolsOutOfProc)" />
+      <HeatDirectory Directory="LibreHardwareMonitorFiles" PreprocessorVariable="var.LibreHardwareMonitorFilesSourceDir" OutputFile="LibreHardwareMonitorFiles.wxs" ComponentGroupName="LibreHardwareMonitorFilesComponentGroup" DirectoryRefId="INSTALLFOLDER" AutogenerateGuids="true" ToolPath="$(WixToolPath)" SuppressFragments="true" SuppressUniqueIds="true" SuppressCom="true" SuppressRegistry="true" SuppressRootDirectory="true" RunAsSeparateProcess="$(RunWixToolsOutOfProc)" />
   </Target>
   <Target Name="EnsureWixToolsetInstalled" Condition=" '$(WixTargetsImported)' != 'true' ">
     <Error Text="The WiX Toolset v3.11 (or newer) build tools must be installed to build this project. To download the WiX Toolset, see http://wixtoolset.org/releases/" />

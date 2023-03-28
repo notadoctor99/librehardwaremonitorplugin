@@ -15,7 +15,7 @@
   <PropertyGroup>
     <BaseIntermediateOutputPath>$(SolutionDir)..\obj\</BaseIntermediateOutputPath>
     <BaseOutputPath>$(SolutionDir)..\bin\</BaseOutputPath>
-    <OutputPath>$(BaseOutputPath)$(Configuration)\</OutputPath>
+    <OutputPath>$(BaseOutputPath)$(Configuration)\LibreHardwareMonitorTester\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
