@@ -215,6 +215,7 @@
                     }
 
                     var cpuId = "";
+                    var gpuId = "";
                     var memoryId = "";
                     var batteryId = "";
 
@@ -229,6 +230,10 @@
                             if (hardwareType.StartsWith("cpu", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 cpuId = hardwareIdentifier;
+                            }
+                            if (hardwareType.StartsWith("gpu", StringComparison.InvariantCultureIgnoreCase))
+                            {
+                                gpuId = hardwareIdentifier;
                             }
                             if (hardwareType.StartsWith("memory", StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -248,6 +253,15 @@
 
                     AddSensor("Clock", @"{-}\n{0:N1} MHz");
                     AddSensor("Load", @"CPU\n{0:N1} %");
+                    AddSensor("Power", @"{-}\n{0:N1} W");
+                    AddSensor("Temperature", @"{-}\n{0:N1} °C");
+                    AddSensor("Voltage", @"{-}\n{0:N3} V");
+
+                    parentName = "GPU";
+                    parentId = gpuId;
+
+                    AddSensor("Clock", @"{-}\n{0:N1} MHz");
+                    AddSensor("Load", @"GPU\n{0:N1} %");
                     AddSensor("Power", @"{-}\n{0:N1} W");
                     AddSensor("Temperature", @"{-}\n{0:N1} °C");
                     AddSensor("Voltage", @"{-}\n{0:N3} V");
@@ -283,6 +297,10 @@
                                     if (identifier.EndsWithNoCase("/load/0") && displayName.EqualsNoCase("CPU Total"))
                                     {
                                         gaugeType = LibreHardwareMonitorGaugeType.CPU;
+                                    }
+                                    else if (identifier.EndsWithNoCase("/load/0") && displayName.EqualsNoCase("GPU Core"))
+                                    {
+                                        gaugeType = LibreHardwareMonitorGaugeType.GPU;
                                     }
                                     else if (identifier.EqualsNoCase("/ram/load/0"))
                                     {
@@ -431,13 +449,9 @@
             {
                 return LibreHardwareMonitor.Activate();
             }
-            else if (LibreHardwareMonitor.IsInstalled())
-            {
-                return LibreHardwareMonitor.Run();
-            }
             else
             {
-                return false;
+                return LibreHardwareMonitor.IsInstalled() ? LibreHardwareMonitor.Run() : false;
             }
         }
 
