@@ -34,6 +34,9 @@
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PluginApi, Version=2.0.8376.25076, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -103,6 +106,21 @@
   <ItemGroup>
     <EmbeddedResource Include="Actions\Images\PressToStart.png" />
     <EmbeddedResource Include="Actions\Images\SensorNotAvailable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\GPU1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\GPU2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\GPU3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\GPU4 .png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Actions\Images\GPU5.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

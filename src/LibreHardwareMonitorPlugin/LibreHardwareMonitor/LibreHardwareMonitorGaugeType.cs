@@ -4,8 +4,9 @@
     {
         None = 0,
         CPU = 1,
-        Memory = 2,
-        Battery = 3,
-        Count = 4, // should always be the last one
+        GPU = 2,
+        Memory = 3,
+        Battery = 4,
+        Count = 5, // should always be the last one
     }
 }

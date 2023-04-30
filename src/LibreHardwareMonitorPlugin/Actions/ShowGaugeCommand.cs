@@ -12,6 +12,7 @@
             this.GroupName = "Gauges";
 
             AddParameter(LibreHardwareMonitorGaugeType.CPU);
+            AddParameter(LibreHardwareMonitorGaugeType.GPU);
             AddParameter(LibreHardwareMonitorGaugeType.Memory);
             AddParameter(LibreHardwareMonitorGaugeType.Battery);
 
@@ -59,6 +60,9 @@
                 case LibreHardwareMonitorGaugeType.CPU:
                     index = Helpers.MinMax((level + 19) / 20, 1, 5);
                     break;
+                case LibreHardwareMonitorGaugeType.GPU:
+                    index = Helpers.MinMax((level + 19) / 20, 1, 5);
+                    break;
                 case LibreHardwareMonitorGaugeType.Memory:
                 case LibreHardwareMonitorGaugeType.Battery:
                     index = Helpers.MinMax((level + 9) / 20, 0, 5);
@@ -89,6 +93,7 @@
         private void OnSensorListChanged(Object sender, EventArgs e)
         {
             this.UpdateGaugeIndex(LibreHardwareMonitorGaugeType.CPU);
+            this.UpdateGaugeIndex(LibreHardwareMonitorGaugeType.GPU);
             this.UpdateGaugeIndex(LibreHardwareMonitorGaugeType.Memory);
             this.UpdateGaugeIndex(LibreHardwareMonitorGaugeType.Battery);
             this.ActionImageChanged(null);
